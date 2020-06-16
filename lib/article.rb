@@ -1,6 +1,6 @@
 class Article < NewsItem
 	@@all = []
-	attr_accessor :title, :publication_date, :web_url 
+	attr_accessor :title, :publication_date, :web_url, :body 
 
 	def initialize(title, publication_date, web_url, extra_kwargs_hash = {})
 		self.title = title
@@ -28,7 +28,7 @@ class Article < NewsItem
 	end
 
 	def snippets
-
+		Snippet.all.select{|snippet| snippet.article = self}
 	end
 
 	def view_article

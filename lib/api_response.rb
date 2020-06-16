@@ -13,7 +13,7 @@ class ApiResponse
 	end
 
 	def self.records_limit
-		self.RECORDS_LIMIT
+		RECORDS_LIMIT
 	end
 
 	def generate_search_url(page)

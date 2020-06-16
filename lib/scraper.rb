@@ -17,7 +17,10 @@ class Scraper
 
 	# end
 
-	def get_snippets(search_term)
-
+	def get_snippet(search_term)
+		body = self.get_article_body
+		body.scan(/.+\..+#{Regexp.quote(search_term)}.+\..+\./)
 	end
 end
+
+binding.pry

@@ -23,12 +23,13 @@ class Cli
 	def articles_menu_logic(next_step)
 		case next_step 
 			when "1"
+				self.view_ten_articles(self.view_articles_start_index)
+				self.articles_menu(first_time = false)
 			when "2"
-				view_ten_articles(self.view_articles_start_index)
-				articles_menu(first_time = false)
+				self.snippet_search_prompt
 			when "3"
 				next_step = self.articles_prompt(first_time = false)
-				articles_menu_logic(next_step)
+				self.articles_menu_logic(next_step)
 			when "4"
 		end
 	end
@@ -98,6 +99,7 @@ class Cli
 		accepted_input = ['1', '2', '3', '4']
 		while !accepted_input.include?(input) do
 			puts "Invalid input, please enter '1', '2', '3', or '4':"
+			input = gets.chomp
 		end
 		input
 	end
@@ -113,7 +115,13 @@ class Cli
 	end
 
 	def snippet_search_prompt
-
+		puts "What keyword would you like to get snippets by?"
+		search_term = gets.chomp
+		Article.all.each do |article|
+			scraper = Scraper.new(article.web_url)
+			snippet_text = scraper.get_snippet(search_term)
+			Snippet.new(snippet_text, article)
+		end
 	end
 
 	def view_snippet_results
