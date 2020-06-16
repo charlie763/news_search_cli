@@ -1,8 +1,9 @@
 class Cli
-	attr_accessor :article_search_keywords
+	attr_accessor :article_search_keywords, :view_articles_start_index
 
 	def initialize
 		self.article_search_keywords = []
+		self.view_articles_start_index = 0
 	end
 
 	def run
@@ -23,9 +24,12 @@ class Cli
 		case next_step 
 			when "1"
 			when "2"
+				view_ten_articles(self.view_articles_start_index)
+				articles_menu(first_time = false)
 			when "3"
-				next_step = self.articles_prompt
-				articles_menu(next_step)
+				next_step = self.articles_prompt(first_time = false)
+				articles_menu_logic(next_step)
+			when "4"
 		end
 	end
 
@@ -82,22 +86,30 @@ class Cli
 		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
 	end
 
-	def articles_menu
+	def articles_menu(first_time = true)
+		first_time ? option_one_lang = "first" : option_one_lang = "next"
 		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
-		puts "1: View details of the first 10 articles."
+		puts "1: View details of the #{option_one_lang} 10 articles."
 		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
 		puts "3: Do a new article search."
-		puts "Please enter '1', '2' or '3':"
+		puts "4: End program."
+		puts "Please enter '1', '2', '3', or '4':"
 		input = gets.chomp
-		accepted_input = ['1', '2', '3']
+		accepted_input = ['1', '2', '3', '4']
 		while !accepted_input.include?(input) do
-			puts "Invalid input, please enter '1', '2' or '3':"
+			puts "Invalid input, please enter '1', '2', '3', or '4':"
 		end
 		input
 	end
 
-	def view_ten_articles
-
+	def view_ten_articles(start_index)
+		Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
+			puts "#{i+start_index}: #{article.title}"
+			puts "Publication Date: #{article.readable_publication_date}"
+			puts "Url: #{article.web_url}"
+			puts "-------------------------------------------------------"
+			self.view_articles_start_index += 10
+		end
 	end
 
 	def snippet_search_prompt
