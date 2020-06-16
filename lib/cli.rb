@@ -7,13 +7,25 @@ class Cli
 
 	def run
 		self.greeting
+		next_step = self.articles_prompt
+		articles_menu_logic(next_step)
+	end
+
+	def articles_prompt(first_time = true)
+		Article.clear_all if !first_time
 		api_response = self.search_for_articles
 		api_articles = self.select_articles(api_response)
 		self.make_articles(api_articles)
-		next_step = self.return_articles_prompt
+		self.articles_menu
+	end
+
+	def articles_menu_logic(next_step)
 		case next_step 
 			when "1"
 			when "2"
+			when "3"
+				next_step = self.articles_prompt
+				articles_menu(next_step)
 		end
 	end
 
@@ -70,19 +82,29 @@ class Cli
 		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
 	end
 
-	def return_articles_prompt
+	def articles_menu
 		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
-		puts "1: View details of the first 10 articles"
+		puts "1: View details of the first 10 articles."
 		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
-		puts "Please enter '1' or '2':"
+		puts "3: Do a new article search."
+		puts "Please enter '1', '2' or '3':"
 		input = gets.chomp
-		while input != '1' && input != '2' do
-			puts "Invalid input, please enter '1' or '2':"
+		accepted_input = ['1', '2', '3']
+		while !accepted_input.include?(input) do
+			puts "Invalid input, please enter '1', '2' or '3':"
 		end
 		input
 	end
 
 	def view_ten_articles
+
+	end
+
+	def snippet_search_prompt
+
+	end
+
+	def view_snippet_results
 
 	end
 
