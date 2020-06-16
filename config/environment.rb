@@ -2,6 +2,7 @@ require 'open-uri'
 require 'json'
 require 'pry'
 
+require_relative '../lib/concerns/news_item.rb'
 require_relative '../lib/api_response.rb'
 require_relative '../lib/scraper.rb'
 require_relative '../lib/article.rb'
