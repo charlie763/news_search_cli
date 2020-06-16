@@ -1,0 +1,44 @@
+require 'awesome_print'
+require 'pry'
+
+class ApiResponse
+	BASE_PATH = "https://content.guardianapis.com/search?q="
+	API_KEY = "62e6b16d-8157-43d2-ab3a-647afb341c7e"
+	RECORDS_LIMIT = 100
+	attr_accessor :search_keywords, :total_articles, :pages
+
+	def initialize(search_keywords)
+		self.search_keywords = search_keywords
+	end
+
+	def generate_search_url(page)
+		# eample result: https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test
+		search_terms = self.search_keywords.map{|keyword| keyword}.join("%20AND%20")
+		BASE_PATH + search_terms + "&api-key=#{API_KEY}&page=#{page}"
+	end
+
+	def get_response_page(page=1)
+		uri = URI.parse(generate_search_url(page))
+		response = JSON.parse(uri.open.string)
+		self.total_articles = response["response"]["total"]
+		self.pages = response["response"]["pages"]
+		response
+	end
+
+	def get_results(page_num)
+		self.get_response_page(page_num)["response"]["results"]
+	end
+
+	def get_all_data(articles_desired)
+		if articles_desired < RECORDS_LIMIT
+			pages_needed = articles_desired/10 + 1
+			remainder_on_last_page = articles_desired%10
+			articles = (1...pages_needed).map{|page_num| self.get_results(page_num)}.flatten
+			remaining_articles = self.get_results(pages_needed)[0...remainder_on_last_page]
+			articles + remaining_articles
+		else
+			puts "Please select a number of desired articles under #{RECORDS_LIMIT}."
+		end
+	end
+end
+
