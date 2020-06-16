@@ -13,6 +13,10 @@ class Scraper
 		self.get_doc.css(".content__article-body").text
 	end
 
+	# def get_first_sentences
+
+	# end
+
 	def get_snippets(search_term)
 
 	end

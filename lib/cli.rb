@@ -6,7 +6,15 @@ class Cli
 	end
 
 	def run
-
+		self.greeting
+		api_response = self.search_for_articles
+		api_articles = self.select_articles(api_response)
+		self.make_articles(api_articles)
+		next_step = self.return_articles_prompt
+		case next_step 
+			when "1"
+			when "2"
+		end
 	end
 
 	def greeting
@@ -48,7 +56,7 @@ class Cli
 	def select_articles(api_response)
 		#expect arg api_response to be the output of #search_for_articles
 		records_limit = ApiResponse.records_limit
-		puts "How many of these articles would you like to view? (limit = #{records_limit})"
+		puts "How many of these articles would you like to select? (limit = #{records_limit})"
 		records_requested = gets.chomp.to_i
 		while records_requested > records_limit do
 			puts "Please enter a number lower than #{records_limit}:"
@@ -62,6 +70,21 @@ class Cli
 		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
 	end
 
+	def return_articles_prompt
+		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
+		puts "1: View details of the first 10 articles"
+		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
+		puts "Please enter '1' or '2':"
+		input = gets.chomp
+		while input != '1' && input != '2' do
+			puts "Invalid input, please enter '1' or '2':"
+		end
+		input
+	end
+
+	def view_ten_articles
+
+	end
 
 end
 
