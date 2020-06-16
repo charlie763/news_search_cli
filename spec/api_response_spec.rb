@@ -25,7 +25,7 @@ let(:ApiResponse) {ApiResponse.new(["remote","tech","jobs"])}
 		end
 	end
 
-	describe "get_response" do
+	describe "get_response_page" do
 		it "returns somethings along the lines of the expected json format of data" do
 			standard_keys = ["status", "total", "startIndex", "pageSize", "currentPage", "pages", "orderBy", "results"]
 			response = ApiResponse.get_response
