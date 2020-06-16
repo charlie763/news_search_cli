@@ -9,6 +9,7 @@ class ApiResponse
 
 	def initialize(search_keywords)
 		self.search_keywords = search_keywords
+		self.get_response_page
 	end
 
 	def self.records_limit
@@ -33,14 +34,20 @@ class ApiResponse
 		self.get_response_page(page_num)["response"]["results"]
 	end
 
-	def get_all_data(articles_desired)
+	def get_articles(articles_desired)
 		if articles_desired < RECORDS_LIMIT
 			pages_needed = articles_desired/10 + 1
 			remainder_on_last_page = articles_desired%10
 			articles = (1...pages_needed).map{|page_num| self.get_results(page_num)}.flatten
 			remaining_articles = self.get_results(pages_needed)[0...remainder_on_last_page]
-			articles + remaining_articles
+			articles_desired = articles + remaining_articles
+			
+			needed_keys = ["sectionName", "webPublicationDate", "webTitle", "webUrl", ]
+			articles_desired.map do |article|
+				article.select{|k,v| needed_keys.include?(k)}
+			end
 		end
 	end
 end
 
+binding.pry

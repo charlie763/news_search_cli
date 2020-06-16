@@ -41,7 +41,7 @@ class Cli
 		api_response
 	end
 
-	def get_articles(api_response)
+	def select_articles(api_response)
 		records_limit = ApiResponse.records_limit
 		puts "How many of these articles would you like to view? (limit = #{records_limit})"
 		records_requested = gets.chomp.to_i
@@ -49,11 +49,11 @@ class Cli
 			puts "Please enter a number lower than #{records_limit}:"
 			records_requested = gets.chomp.to_i
 		end
-		api_response.get_all_data(records_requested)
+		api_response.get_articles(records_requested)
 	end
 
-	def make_articles
-
+	def make_articles(api_articles)
+		api_articles.each{Article.new}
 	end
 end
 
