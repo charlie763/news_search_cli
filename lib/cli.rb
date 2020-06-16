@@ -5,6 +5,10 @@ class Cli
 		self.article_search_keywords = []
 	end
 
+	def run
+
+	end
+
 	def greeting
 		puts "Welcome to the News Search and Summary App!"
 		puts "Currently, you can search The Guardian for relevant articles and return a summary of article snippets related to your search."
@@ -42,6 +46,7 @@ class Cli
 	end
 
 	def select_articles(api_response)
+		#expect arg api_response to be the output of #search_for_articles
 		records_limit = ApiResponse.records_limit
 		puts "How many of these articles would you like to view? (limit = #{records_limit})"
 		records_requested = gets.chomp.to_i
@@ -53,8 +58,11 @@ class Cli
 	end
 
 	def make_articles(api_articles)
-		api_articles.each{Article.new}
+		#expect input api_articles to be the output of #select_articles
+		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
 	end
+
+
 end
 
 

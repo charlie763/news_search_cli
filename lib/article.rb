@@ -10,14 +10,17 @@ class Article < NewsItem
 			self.class.attr_accessor(k.to_sym)
       self.send("#{k}=", v)
 		end
+		self.save
 	end
 
-	def new_from_api_hash(api_hash)
-
+	def self.new_from_api_hash(api_hash)
+		required_args = ["webPublicationDate", "webTitle", "webUrl"]
+		extra_kwargs_hash = api_hash.select{|k,v| !required_args.include?(k)}
+		self.new(api_hash["webTitle"], api_hash["webPublicationDate"], api_hash["webUrl"], extra_kwargs_hash)
 	end
 
 	def self.all
-
+		@@all
 	end
 
 	def readable_publication_date
