@@ -1,14 +1,14 @@
 RSpec.describe "Article" do
 let(:test_article) {Article.new("2020-03-04T05:00:32Z", "Coronavirus: Google leads tech charge to work from home", "https://www.theguardian.com/world/2020/mar/04/coronavirus-google-tech-dublin-twitter-work-from-home")}
 	describe "#initialize" do
-		it "initializes with a :web_publication_date, :web_title, and :web_url" do
-			expect(test_article.instance_variable_get(:web_publication_date)).to eq("2020-03-04T05:00:32Z")
-			expect(test_article.instance_variable_get(:web_title)).to eq("Coronavirus: Google leads tech charge to work from home")
-			expect(test_article.instance_variable_get(:web_publication_date)).to eq("https://www.theguardian.com/world/2020/mar/04/coronavirus-google-tech-dublin-twitter-work-from-home")
+		it "initializes with a :publication_date, :itle, and :web_url" do
+			expect(test_article.instance_variable_get(:publication_date)).to eq("2020-03-04T05:00:32Z")
+			expect(test_article.instance_variable_get(:title)).to eq("Coronavirus: Google leads tech charge to work from home")
+			expect(test_article.instance_variable_get(:web_url)).to eq("https://www.theguardian.com/world/2020/mar/04/coronavirus-google-tech-dublin-twitter-work-from-home")
 		end
 
 		it "can initialize with additional arguments" do 
-			test_article2 = Article.new("date","title","url", sectionName: "World News")
+			test_article2 = Article.new("date","title","url", {sectionName: "World News"})
 			expect(test_article.instance_variable_get(:sectionName)).to eq("World News")
 		end
 	end
