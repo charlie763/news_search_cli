@@ -23,6 +23,10 @@ class Article < NewsItem
 		@@all
 	end
 
+	def self.find_article_by_title(title)
+		self.all.detect{|article| article.title == title}
+	end
+
 	def readable_publication_date
 
 	end

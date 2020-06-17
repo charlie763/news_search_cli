@@ -12,6 +12,7 @@ class Cli
 		self.greeting
 		next_step = self.articles_prompt
 		articles_menu_logic(next_step)
+		self.goodbye
 	end
 
 	def articles_prompt(first_time = true)
@@ -33,11 +34,11 @@ class Cli
 		puts "5: End program."
 		puts "Please enter '1', '2', '3', '4', or '5':"
 		input = gets.chomp
+		puts ""
 		accepted_input = ['1', '2', '3', '4', '5']
 		while !accepted_input.include?(input) do
 			puts "Invalid input, please enter '1', '2', '3', '4', or '5':"
 			input = gets.chomp
-			puts ""
 		end
 		input
 	end
@@ -61,6 +62,8 @@ class Cli
 				self.view_snippet_results
 				self.process_menu(first_time = false)
 			when "3"
+				self.find_article_by_title_prompt
+				self.process_menu
 			when "4"
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
@@ -71,6 +74,11 @@ class Cli
 	def greeting
 		puts "Welcome to the News Search and Summary App!"
 		puts "Currently, you can search The Guardian for relevant articles and return a summary of article snippets related to your search."
+	end
+
+	def goodbye
+		puts "Thanks for searching!"
+		puts "Contact cwisoff@gmail.com if you have any feedback or would like to contribute."
 	end
 
 	def add_search_keyword(keyword)
@@ -121,14 +129,32 @@ class Cli
 		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
 	end
 
-	def view_ten_articles(start_index)
-		Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
-			puts "#{i+start_index}: #{article.title}"
+	def view_article(article)
+			puts "#{article.title}"
 			puts "Publication Date: #{article.readable_publication_date}"
 			puts "Url: #{article.web_url}"
 			puts "-------------------------------------------------------"
+	end
+
+	def view_ten_articles(start_index)
+		Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
+			print "#{i+start_index}: "
+			self.view_article(article) 
 		end
 		self.view_articles_start_index += 10
+	end
+
+	def find_article_by_title_prompt
+		puts "Please enter the title of the article you'd like to find:"
+		title_input = gets.chomp
+		article = Article.find_article_by_title(title_input)
+		if article 
+			puts "-------------------------------------------------------"
+			self.view_article(article) 
+		else 
+			puts ""
+			puts "Sorry, there are no articles by that title. Search for a different title, or search for new articles."
+		end
 	end
 
 	def snippet_search_prompt
@@ -154,7 +180,6 @@ class Cli
 			puts "-------------------------------------------------------"
 		end
 	end
-
 end
 
-binding.pry
+
