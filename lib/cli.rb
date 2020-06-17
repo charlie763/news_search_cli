@@ -4,11 +4,11 @@ class Cli
 	def initialize
 		self.article_search_keywords = []
 		self.view_articles_start_index = 0
+		Article.clear_all
+		Snippet.clear_all
 	end
 
 	def run
-		Article.clear_all
-		Snippet.clear_all
 		self.greeting
 		next_step = self.articles_prompt
 		articles_menu_logic(next_step)
@@ -35,6 +35,7 @@ class Cli
 		while !accepted_input.include?(input) do
 			puts "Invalid input, please enter '1', '2', '3', or '4':"
 			input = gets.chomp
+			puts ""
 		end
 		input
 	end
@@ -42,12 +43,20 @@ class Cli
 	def articles_menu_logic(next_step)
 		case next_step 
 			when "1"
+				if self.view_articles_start_index >= self.article_records_requested
+					puts "There are no more articles. Please do another article search or select another menu option:"
+					puts ""
+					next_step = self.articles_menu(first_time = false)
+					self.articles_menu_logic(next_step)
+				end
 				self.view_ten_articles(self.view_articles_start_index)
-				self.articles_menu(first_time = false)
+				next_step = self.articles_menu(first_time = false)
+				self.articles_menu_logic(next_step)
 			when "2"
 				self.snippet_search_prompt
 				self.view_snippet_results
-
+				next_step = self.articles_menu(first_time = false)
+				self.articles_menu_logic(next_step)
 			when "3"
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
@@ -114,15 +123,15 @@ class Cli
 			puts "Publication Date: #{article.readable_publication_date}"
 			puts "Url: #{article.web_url}"
 			puts "-------------------------------------------------------"
-			self.view_articles_start_index += 10
 		end
+		self.view_articles_start_index += 10
 	end
 
 	def snippet_search_prompt
 		puts "What keyword would you like to get snippets by?"
 		search_term = gets.chomp
 		puts "Thanks! Getting snippets from #{self.article_records_requested} articles."
-		puts "This may take a second."
+		puts "This may take a second..."
 		Article.all.each do |article|
 			scraper = Scraper.new(article.web_url)
 			snippet_text_ary = scraper.get_snippet(search_term)
@@ -137,10 +146,10 @@ class Cli
 		Snippet.all.each do |snippet|
 			puts "Article: #{snippet.article.title}"
 			puts snippet.text
+			puts "-------------------------------------------------------"
 		end
 	end
 
 end
 
-c = Cli.new
 binding.pry
