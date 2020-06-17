@@ -10,7 +10,7 @@ class Scraper
 	end
 
 	def get_article_body
-		self.get_doc.css(".content__article-body").text
+		self.get_doc.css(".content__article-body").text.gsub(/\n{3,}/,"")
 	end
 
 	# def get_first_sentences

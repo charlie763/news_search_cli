@@ -136,13 +136,31 @@ class Cli
 			puts "#{article.title}"
 			puts "Publication Date: #{article.readable_publication_date}"
 			puts "Url: #{article.web_url}"
-			puts "-------------------------------------------------------"
+	end
+
+	def view_full_article(article)
+		standard_vars = [:@title, :@publication_date, :@web_url, :@body] 
+		article.instance_variables.each do |var|
+			unless standard_vars.include?(var)
+				var_as_str = var.to_s.delete("@")
+				var_value = article.send("#{var_as_str}")
+				puts "#{var_as_str.capitalize}: #{var_value}"
+			end
+		end
+		puts ""
+
+		scraper = Scraper.new(article.web_url)
+		article.body = scraper.get_article_body
+		puts "Full Article:"
+		puts "#{article.body}"
 	end
 
 	def view_ten_articles(start_index)
 		Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
+			puts "-------------------------------------------------------"
 			print "#{i+start_index}: "
-			self.view_article(article) 
+			self.view_article(article)
+			puts "-------------------------------------------------------" 
 		end
 		self.view_articles_start_index += 10
 	end
@@ -154,6 +172,8 @@ class Cli
 		if article 
 			puts "-------------------------------------------------------"
 			self.view_article(article) 
+			self.view_full_article(article)
+			puts "-------------------------------------------------------"
 		else 
 			puts ""
 			puts "Sorry, there are no articles by that title. Search for a different title, or search for new articles."
