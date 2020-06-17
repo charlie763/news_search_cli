@@ -19,8 +19,10 @@ class Scraper
 
 	def get_snippet(search_term)
 		body = self.get_article_body
-		body.scan(/.+\..+#{Regexp.quote(search_term)}.+\..+\./)
+		lowercase_term = search_term.downcase
+		snippet_ary = body.scan(/[A-Z\s][^\\.;?!]*#{Regexp.quote(lowercase_term)}[^\\.;?!]*[.?!][A-Z\s][^\\.;?!]*/)
+		snippet_ary += body.scan(/[A-Z\s][^\\.;?!]*#{Regexp.quote(lowercase_term.capitalize)}[^\\.;?!]*[.?!][A-Z\s][^\\.;?!]*/)
 	end
 end
 
-binding.pry
+

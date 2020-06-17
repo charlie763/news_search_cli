@@ -119,8 +119,8 @@ class Cli
 		search_term = gets.chomp
 		Article.all.each do |article|
 			scraper = Scraper.new(article.web_url)
-			snippet_text = scraper.get_snippet(search_term)
-			Snippet.new(snippet_text, article)
+			snippet_text_ary = scraper.get_snippet(search_term)
+			snippet_text_ary.each{|snippet_text| Snippet.new(snippet_text, article)}
 		end
 	end
 
@@ -130,4 +130,4 @@ class Cli
 
 end
 
-
+binding.pry

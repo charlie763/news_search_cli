@@ -4,7 +4,7 @@ require 'pry'
 class ApiResponse
 	BASE_PATH = "https://content.guardianapis.com/search?q="
 	API_KEY = "62e6b16d-8157-43d2-ab3a-647afb341c7e"
-	RECORDS_LIMIT = 500
+	RECORDS_LIMIT = 200
 	attr_accessor :search_keywords, :total_articles, :pages
 
 	def initialize(search_keywords)
@@ -35,7 +35,7 @@ class ApiResponse
 	end
 
 	def get_articles(articles_desired)
-		if articles_desired < RECORDS_LIMIT
+		if articles_desired <= RECORDS_LIMIT
 			pages_needed = articles_desired/10 + 1
 			remainder_on_last_page = articles_desired%10
 			articles = (1...pages_needed).map{|page_num| self.get_results(page_num)}.flatten
