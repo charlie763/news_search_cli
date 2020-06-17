@@ -24,20 +24,27 @@ class Cli
 
 	def articles_menu(first_time = true)
 		first_time ? option_one_lang = "first" : option_one_lang = "next"
+		puts ""
 		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
 		puts "1: View details of the #{option_one_lang} 10 articles."
 		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
-		puts "3: Do a new article search."
-		puts "4: End program."
-		puts "Please enter '1', '2', '3', or '4':"
+		puts "3: Get article details by the article's title."
+		puts "4: Do a new article search."
+		puts "5: End program."
+		puts "Please enter '1', '2', '3', '4', or '5':"
 		input = gets.chomp
-		accepted_input = ['1', '2', '3', '4']
+		accepted_input = ['1', '2', '3', '4', '5']
 		while !accepted_input.include?(input) do
-			puts "Invalid input, please enter '1', '2', '3', or '4':"
+			puts "Invalid input, please enter '1', '2', '3', '4', or '5':"
 			input = gets.chomp
 			puts ""
 		end
 		input
+	end
+
+	def process_menu(first_time = true)
+		next_step = self.articles_menu(first_time = first_time)
+		self.articles_menu_logic(next_step)
 	end
 
 	def articles_menu_logic(next_step)
@@ -45,22 +52,19 @@ class Cli
 			when "1"
 				if self.view_articles_start_index >= self.article_records_requested
 					puts "There are no more articles. Please do another article search or select another menu option:"
-					puts ""
-					next_step = self.articles_menu(first_time = false)
-					self.articles_menu_logic(next_step)
+					self.process_menu(first_time = false)
 				end
 				self.view_ten_articles(self.view_articles_start_index)
-				next_step = self.articles_menu(first_time = false)
-				self.articles_menu_logic(next_step)
+				self.process_menu(first_time = false)
 			when "2"
 				self.snippet_search_prompt
 				self.view_snippet_results
-				next_step = self.articles_menu(first_time = false)
-				self.articles_menu_logic(next_step)
+				self.process_menu(first_time = false)
 			when "3"
+			when "4"
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
-			when "4"
+			when "5"
 		end
 	end
 
@@ -128,6 +132,7 @@ class Cli
 	end
 
 	def snippet_search_prompt
+		Snippet.clear_all
 		puts "What keyword would you like to get snippets by?"
 		search_term = gets.chomp
 		puts "Thanks! Getting snippets from #{self.article_records_requested} articles."
@@ -145,7 +150,7 @@ class Cli
 		puts "-------------------------------------------------------"
 		Snippet.all.each do |snippet|
 			puts "Article: #{snippet.article.title}"
-			puts snippet.text
+			puts snippet.text.gsub("\n", " ")
 			puts "-------------------------------------------------------"
 		end
 	end
