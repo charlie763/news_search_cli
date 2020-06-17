@@ -1,6 +1,6 @@
 class NewsItem
 	def self.clear_all
-		self.call.clear
+		self.all.clear
 	end
 
 	def save

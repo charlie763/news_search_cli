@@ -1,5 +1,5 @@
 class Cli
-	attr_accessor :article_search_keywords, :view_articles_start_index
+	attr_accessor :article_search_keywords, :view_articles_start_index, :article_records_requested
 
 	def initialize
 		self.article_search_keywords = []
@@ -7,6 +7,8 @@ class Cli
 	end
 
 	def run
+		Article.clear_all
+		Snippet.clear_all
 		self.greeting
 		next_step = self.articles_prompt
 		articles_menu_logic(next_step)
@@ -20,6 +22,23 @@ class Cli
 		self.articles_menu
 	end
 
+	def articles_menu(first_time = true)
+		first_time ? option_one_lang = "first" : option_one_lang = "next"
+		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
+		puts "1: View details of the #{option_one_lang} 10 articles."
+		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
+		puts "3: Do a new article search."
+		puts "4: End program."
+		puts "Please enter '1', '2', '3', or '4':"
+		input = gets.chomp
+		accepted_input = ['1', '2', '3', '4']
+		while !accepted_input.include?(input) do
+			puts "Invalid input, please enter '1', '2', '3', or '4':"
+			input = gets.chomp
+		end
+		input
+	end
+
 	def articles_menu_logic(next_step)
 		case next_step 
 			when "1"
@@ -27,6 +46,8 @@ class Cli
 				self.articles_menu(first_time = false)
 			when "2"
 				self.snippet_search_prompt
+				self.view_snippet_results
+
 			when "3"
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
@@ -74,34 +95,17 @@ class Cli
 		#expect arg api_response to be the output of #search_for_articles
 		records_limit = ApiResponse.records_limit
 		puts "How many of these articles would you like to select? (limit = #{records_limit})"
-		records_requested = gets.chomp.to_i
-		while records_requested > records_limit do
+		self.article_records_requested = gets.chomp.to_i
+		while self.article_records_requested > records_limit do
 			puts "Please enter a number lower than #{records_limit}:"
-			records_requested = gets.chomp.to_i
+			self.article_records_requested = gets.chomp.to_i
 		end
-		api_response.get_articles(records_requested)
+		api_response.get_articles(self.article_records_requested)
 	end
 
 	def make_articles(api_articles)
 		#expect input api_articles to be the output of #select_articles
 		api_articles.each{|article_hash| Article.new_from_api_hash(article_hash)}
-	end
-
-	def articles_menu(first_time = true)
-		first_time ? option_one_lang = "first" : option_one_lang = "next"
-		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
-		puts "1: View details of the #{option_one_lang} 10 articles."
-		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
-		puts "3: Do a new article search."
-		puts "4: End program."
-		puts "Please enter '1', '2', '3', or '4':"
-		input = gets.chomp
-		accepted_input = ['1', '2', '3', '4']
-		while !accepted_input.include?(input) do
-			puts "Invalid input, please enter '1', '2', '3', or '4':"
-			input = gets.chomp
-		end
-		input
 	end
 
 	def view_ten_articles(start_index)
@@ -117,17 +121,26 @@ class Cli
 	def snippet_search_prompt
 		puts "What keyword would you like to get snippets by?"
 		search_term = gets.chomp
+		puts "Thanks! Getting snippets from #{self.article_records_requested} articles."
+		puts "This may take a second."
 		Article.all.each do |article|
 			scraper = Scraper.new(article.web_url)
 			snippet_text_ary = scraper.get_snippet(search_term)
 			snippet_text_ary.each{|snippet_text| Snippet.new(snippet_text, article)}
 		end
+		puts "We found #{Snippet.all.length} snippet(s)."
 	end
 
 	def view_snippet_results
-
+		puts "Here are the results:"
+		puts "-------------------------------------------------------"
+		Snippet.all.each do |snippet|
+			puts "Article: #{snippet.article.title}"
+			puts snippet.text
+		end
 	end
 
 end
 
+c = Cli.new
 binding.pry
