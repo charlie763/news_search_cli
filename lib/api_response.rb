@@ -16,7 +16,7 @@ class ApiResponse
 		RECORDS_LIMIT
 	end
 
-	def generate_search_url(page)
+	def generate_search_url(page=1)
 		# eample result: https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test
 		search_terms = self.search_keywords.map{|keyword| keyword}.join("%20AND%20")
 		BASE_PATH + search_terms + "&api-key=#{API_KEY}&page=#{page}"
