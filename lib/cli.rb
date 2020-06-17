@@ -16,7 +16,10 @@ class Cli
 	end
 
 	def articles_prompt(first_time = true)
-		Article.clear_all if !first_time
+		unless first_time
+			Article.clear_all 
+			self.article_search_keywords = []
+		end
 		api_response = self.search_for_articles
 		api_articles = self.select_articles(api_response)
 		self.make_articles(api_articles)
@@ -161,6 +164,7 @@ class Cli
 		Snippet.clear_all
 		puts "What keyword would you like to get snippets by?"
 		search_term = gets.chomp
+		puts ""
 		puts "Thanks! Getting snippets from #{self.article_records_requested} articles."
 		puts "This may take a second..."
 		Article.all.each do |article|
@@ -182,4 +186,5 @@ class Cli
 	end
 end
 
+binding.pry
 

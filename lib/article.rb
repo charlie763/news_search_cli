@@ -28,14 +28,12 @@ class Article < NewsItem
 	end
 
 	def readable_publication_date
-
+		#expect "2019-06-11T18:00:14Z" from guardian"
+		date = Date.parse(self.publication_date)
+		"#{Date::MONTHNAMES[date.month]} #{date.day}, #{date.year}"
 	end
 
 	def snippets
 		Snippet.all.select{|snippet| snippet.article = self}
-	end
-
-	def view_article
-
 	end
 end
