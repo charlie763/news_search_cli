@@ -2,7 +2,8 @@ require 'open-uri'
 require 'json'
 require 'nokogiri'
 require 'date'
-require 'pry'
+require 'colorize'
+
 
 require_relative './concerns/news_item.rb'
 require_relative './news_search_cli/api_response.rb'

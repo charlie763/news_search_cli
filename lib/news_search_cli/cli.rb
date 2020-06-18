@@ -65,8 +65,8 @@ class Cli
 				self.view_ten_articles(self.view_articles_start_index)
 				self.process_menu
 			when "2"
-				self.snippet_search_prompt
-				self.view_snippet_results
+				search_term = self.snippet_search_prompt
+				self.view_snippet_results(search_term)
 				self.process_menu
 			when "3"
 				self.find_article_by_title_prompt
@@ -158,7 +158,7 @@ class Cli
 		scraper = Scraper.new(article.web_url)
 		article.body = scraper.get_article_body
 		puts "Full Article:"
-		puts "#{article.body}"
+		puts "#{article.body}".colorize(:light_blue)
 	end
 
 	def view_ten_articles(start_index)
@@ -201,16 +201,27 @@ class Cli
 			snippet_text_ary.each{|snippet_text| Snippet.new(snippet_text, article)}
 		end
 		puts "We found #{Snippet.all.length} snippet(s)."
+		search_term
 	end
 
-	def view_snippet_results
+	def view_snippet_results(search_term)
 		puts "Here are the results:"
 		puts "-------------------------------------------------------"
 		Snippet.all.each do |snippet|
 			puts "Article: #{snippet.article.title}"
-			puts snippet.text.gsub("\n", " ")
+			puts self.colorize_by_word(snippet.text.gsub("\n", " "), search_term)
 			puts "-------------------------------------------------------"
 		end
+	end
+
+	def colorize_by_word(str, word)
+		first_letter = word[0].downcase
+		rest_of_word = word[1...word.length]
+		str_ary = str.partition(/[#{Regexp.quote(first_letter)}#{Regexp.quote(first_letter.upcase)}]#{Regexp.quote(rest_of_word)}/)
+		colorized_ary = str_ary.map do |segment| 
+			segment.capitalize == word.capitalize ? segment.colorize(:red) : segment.colorize(:light_blue)
+		end
+		colorized_ary.join("")
 	end
 end
 

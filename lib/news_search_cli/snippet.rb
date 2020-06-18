@@ -12,7 +12,4 @@ class Snippet < NewsItem
 		@@all
 	end
 
-	def snippets_by_article
-
-	end
 end
