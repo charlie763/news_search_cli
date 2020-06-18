@@ -10,7 +10,7 @@ class Scraper
 	end
 
 	def get_article_body
-		self.get_doc.css(".content__article-body").text.gsub(/\n{3,}/,"\n\n")
+		self.get_doc.css(".content__article-body").text.gsub(/\n{3,}/,"\n")
 	end
 
 	def get_snippet(search_term)

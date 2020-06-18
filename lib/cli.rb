@@ -16,7 +16,6 @@ class Cli
 		self.greeting
 		next_step = self.articles_prompt
 		articles_menu_logic(next_step)
-		self.goodbye
 	end
 
 	def articles_prompt(first_time = true)
@@ -77,6 +76,7 @@ class Cli
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
 			when "5"
+				self.goodbye
 		end
 	end
 
@@ -162,13 +162,15 @@ class Cli
 	end
 
 	def view_ten_articles(start_index)
-		Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
-			puts "-------------------------------------------------------"
-			print "#{i+start_index}: "
-			self.view_article(article)
-			puts "-------------------------------------------------------" 
+		if Article.all
+			Article.all[start_index...(start_index+10)].each.with_index(1) do |article, i|
+				puts "-------------------------------------------------------"
+				print "#{i+start_index}: "
+				self.view_article(article)
+				puts "-------------------------------------------------------" 
+			end
+			self.view_articles_start_index += 10
 		end
-		self.view_articles_start_index += 10
 	end
 
 	def find_article_by_title_prompt
