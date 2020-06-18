@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../config/environment'
+require_relative '../lib/news_search_cli.rb'
 
 cli = Cli.new
 cli.run
