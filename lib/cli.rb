@@ -33,7 +33,7 @@ class Cli
 		self.option_one_first_time ? option_one_lang = "first" : option_one_lang = "next"
 		puts ""
 		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
-		puts "1: View details of the #{option_one_lang} 10 articles."
+		puts "1: View list of the #{option_one_lang} 10 articles."
 		puts "2: Search by a keyword and return snippets from all the selected articles with that keyword."
 		puts "3: Get article details by the article's title."
 		puts "4: Do a new article search."
