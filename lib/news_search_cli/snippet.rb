@@ -3,6 +3,7 @@ class Snippet < NewsItem
 	attr_accessor :text, :article
 
 	def initialize(text, article)
+		raise TypeError, "New Snippets must be passed an Article object as the second argument" if article.class != Article
 		self.text = text
 		self.article = article
 		self.save
