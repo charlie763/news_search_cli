@@ -1,9 +1,13 @@
 class Cli
-	attr_accessor :article_search_keywords, :view_articles_start_index, :article_records_requested
+	attr_accessor :article_search_keywords, 
+								:view_articles_start_index, 
+								:article_records_requested,
+								:option_one_first_time
 
 	def initialize
 		self.article_search_keywords = []
 		self.view_articles_start_index = 0
+		self.option_one_first_time = true
 		Article.clear_all
 		Snippet.clear_all
 	end
@@ -26,8 +30,8 @@ class Cli
 		self.articles_menu
 	end
 
-	def articles_menu(first_time = true)
-		first_time ? option_one_lang = "first" : option_one_lang = "next"
+	def articles_menu
+		self.option_one_first_time ? option_one_lang = "first" : option_one_lang = "next"
 		puts ""
 		puts "You've selected #{Article.all.length} articles. What would you like to do next?"
 		puts "1: View details of the #{option_one_lang} 10 articles."
@@ -46,8 +50,8 @@ class Cli
 		input
 	end
 
-	def process_menu(first_time = true)
-		next_step = self.articles_menu(first_time = first_time)
+	def process_menu
+		next_step = self.articles_menu
 		self.articles_menu_logic(next_step)
 	end
 
@@ -56,18 +60,20 @@ class Cli
 			when "1"
 				if self.view_articles_start_index >= self.article_records_requested
 					puts "There are no more articles. Please do another article search or select another menu option:"
-					self.process_menu(first_time = false)
+					self.process_menu
 				end
+				self.option_one_first_time = false
 				self.view_ten_articles(self.view_articles_start_index)
-				self.process_menu(first_time = false)
+				self.process_menu
 			when "2"
 				self.snippet_search_prompt
 				self.view_snippet_results
-				self.process_menu(first_time = false)
+				self.process_menu
 			when "3"
 				self.find_article_by_title_prompt
 				self.process_menu
 			when "4"
+				self.option_one_first_time = true
 				next_step = self.articles_prompt(first_time = false)
 				self.articles_menu_logic(next_step)
 			when "5"

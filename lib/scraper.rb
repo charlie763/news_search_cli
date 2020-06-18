@@ -10,12 +10,8 @@ class Scraper
 	end
 
 	def get_article_body
-		self.get_doc.css(".content__article-body").text.gsub(/\n{3,}/,"")
+		self.get_doc.css(".content__article-body").text.gsub(/\n{3,}/,"\n\n")
 	end
-
-	# def get_first_sentences
-
-	# end
 
 	def get_snippet(search_term)
 		body = self.get_article_body
