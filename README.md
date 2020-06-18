@@ -1,8 +1,8 @@
 # NewsSearchCli
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/news_search_cli`. To experiment with that code, run `bin/console` for an interactive prompt.
+The News Search CLI is a Ruby CLI application that allows the user to search news articles and then pull text snippets from across an array of returned artcles. For example, the user could search for articles that match the keywords "technology," "remote," and "work" and then return snippets with the word "Google," if they were interested in learning about Google's remote work policy. 
 
-TODO: Delete this and the text above, and describe your gem
+Currently the applications utilizes the [The Guardian's API](https://open-platform.theguardian.com/documentation/) and scrapes directly from individual Guardian article webpages. This is an MVP proof of concept. The hope is that this application will be extensible to other news and media sources.
 
 ## Installation
 
@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Execute 'bin/run' to start the program. CLI prompts will lead the user through the rest of the program.
 
 ## Development
 
