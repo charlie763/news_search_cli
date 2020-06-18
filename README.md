@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-Execute 'bin/run' to start the program. CLI prompts will lead the user through the rest of the program.
+Execute `bin/run` to start the program. CLI prompts will lead the user through the rest of the program.
 
 ## Development
 
