@@ -126,8 +126,8 @@ class Cli
 		records_limit = ApiResponse.records_limit
 		puts "How many of these articles would you like to select? (limit = #{records_limit})"
 		self.article_records_requested = gets.chomp.to_i
-		while self.article_records_requested > records_limit do
-			puts "Please enter a number lower than #{records_limit}:"
+		while article_records_requested > records_limit || article_records_requested <= 0 do
+			puts "Please enter a positive number lower than #{records_limit}:"
 			self.article_records_requested = gets.chomp.to_i
 		end
 		api_response.get_articles(self.article_records_requested)
