@@ -1,8 +1,8 @@
 class Cli
 	attr_accessor :article_search_keywords, 
-								:view_articles_start_index, 
-								:article_records_requested,
-								:option_one_first_time
+		:view_articles_start_index, 
+		:article_records_requested,
+		:option_one_first_time
 
 	def initialize
 		self.article_search_keywords = []

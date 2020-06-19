@@ -7,6 +7,10 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
+def reload! 
+	load './lib/news_search_cli.rb'
+end
+
 task :console do
 	Pry.start
 end

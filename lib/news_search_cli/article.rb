@@ -7,7 +7,7 @@ class Article < NewsItem
 		self.publication_date = publication_date
 		self.web_url = web_url
 		extra_kwargs_hash.each do |k,v|
-			self.class.attr_accessor(k.to_sym)
+			self.class.attr_accessor(k.to_sym) if !self.methods.include?(k.to_sym)
       self.send("#{k}=", v)
 		end
 		self.save
