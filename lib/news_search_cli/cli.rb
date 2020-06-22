@@ -22,6 +22,7 @@ class Cli
 		unless first_time
 			Article.clear_all 
 			self.article_search_keywords = []
+			self.view_articles_start_index = 0
 		end
 		api_response = self.search_for_articles
 		api_articles = self.select_articles(api_response)
