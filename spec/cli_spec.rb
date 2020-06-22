@@ -1,4 +1,19 @@
-Rspec.describe 'Cli' do
+RSpec.describe 'Cli' do
+let(:cli_instance) {Cli.new}
+
+	describe "#articles_prompt" do
+		it "calls the #search_for_articles method" do
+			# allow(input).to receive('y')
+			
+		
+			expect(self).to receive(:search_for_articles).with(no_args)
+			cli_instance.articles_prompt
+			allow(cli_instance).to receive(:gets).and_return('test')
+			allow(cli_instance).to receive(:gets).and_return('n')
+			allow(cli_instance).to receive(:gets).and_return('2')
+		end
+	end
+
 	describe "#search_for_articles" do
 		it "asks for an initial search term" do
 		end

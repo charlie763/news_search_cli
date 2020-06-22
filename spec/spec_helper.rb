@@ -1,5 +1,5 @@
 require "bundler/setup"
-require_relative "../config/environment.rb"
+require_relative "../lib/news_search_cli.rb"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
