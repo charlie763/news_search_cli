@@ -4,13 +4,13 @@ let(:cli_instance) {Cli.new}
 	describe "#articles_prompt" do
 		it "calls the #search_for_articles method" do
 			# allow(input).to receive('y')
-			
+						allow(cli_instance).to receive(:gets).and_return('y')
+			allow(cli_instance).to receive(:gets).and_return('n')
+			#allow(cli_instance).to receive(:gets).and_return('2')
 		
 			expect(self).to receive(:search_for_articles).with(no_args)
 			cli_instance.articles_prompt
-			allow(cli_instance).to receive(:gets).and_return('test')
-			allow(cli_instance).to receive(:gets).and_return('n')
-			allow(cli_instance).to receive(:gets).and_return('2')
+
 		end
 	end
 
