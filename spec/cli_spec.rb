@@ -29,5 +29,9 @@ let(:cli_instance) {Cli.new}
 		it "returns the Api Response, once the user has added all the search terms they want" do
 
 		end
+
+		it "tests something" do
+
+		end
 	end	
 end
