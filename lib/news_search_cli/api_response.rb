@@ -3,7 +3,7 @@ require 'pry'
 
 class ApiResponse
 	BASE_PATH = "https://content.guardianapis.com/search?q="
-	API_KEY = "62e6b16d-8157-43d2-ab3a-647afb341c7e"
+	API_KEY = ENV['API_KEY']
 	RECORDS_LIMIT = 200
 	attr_accessor :search_keywords, :total_articles, :pages
 

@@ -1,3 +1,4 @@
+require 'dotenv/load'
 require 'open-uri'
 require 'json'
 require 'nokogiri'
